@@ -13,6 +13,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final questions = const [
+    {
+      'questionText': 'Quel est ta couleur pref ?',
+      'answers': ['Bleu', 'Jaune', 'Rose', 'Vert'],
+    },
+    {
+      'questionText': 'Quel est ton animal pref ?',
+      'answers': ['Chat', 'Chien', 'Lapin', 'Elephant'],
+    },
+    {
+      'questionText': 'Quel est ton pref ?',
+      'answers': ['Annie Brie', 'Claude', 'Harrry', 'Jorda,'],
+    },
+  ];
   var _questionIndex = 0;
 
   void _answerQuestion() {
@@ -20,25 +34,27 @@ class _MyAppState extends State<MyApp> {
       // call build()
       _questionIndex = _questionIndex + 1;
     });
+    if (_questionIndex < questions.length) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    var _questions = [
-      'Quel est ta couleur pref ?',
-      'Quel est ton animal pref ?'
-    ];
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
             title: Text('First App'),
           ),
-          body: Column(children: [
-            Question(_questions[_questionIndex]),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
-          ])),
+          body: _questionIndex < questions.length
+              ? Column(children: [
+                  Question(questions[_questionIndex]['questionText']),
+                  ...(questions[_questionIndex]['answers'] as List<String>)
+                      .map((answer) {
+                    return Answer(_answerQuestion, answer);
+                  }).toList()
+                ])
+              : Center(
+                  child: Text('Bravo le veau'),
+                )),
     );
   }
 }
